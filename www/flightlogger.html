@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flight Logger</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    </style>
+</head>
+<body>
+<h1>Flight Logger</h1>
+<form id="flightForm">
+    <label for="start">Start (UTC):</label>
+    <input type="datetime-local" id="start" required>
+    <label for="arrival">Arrival (UTC):</label>
+    <input type="datetime-local" id="arrival" required>
+    <button type="submit">Add flight</button>
+</form>
+
+<table id="log">
+    <thead>
+        <tr><th>Start</th><th>Arrival</th><th>Duration (h:m)</th></tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script>
+let flights = JSON.parse(localStorage.getItem('flights') || '[]');
+function render() {
+    const tbody = document.querySelector('#log tbody');
+    tbody.innerHTML = '';
+    flights.forEach(f => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${f.start}</td><td>${f.arrival}</td><td>${f.duration}</td>`;
+        tbody.appendChild(tr);
+    });
+}
+function computeDuration(start, arrival){
+    const startDate = new Date(start + 'Z');
+    const arrivalDate = new Date(arrival + 'Z');
+    const diffMs = arrivalDate - startDate;
+    const diffMin = Math.floor(diffMs / 60000);
+    const hours = Math.floor(diffMin / 60);
+    const minutes = diffMin % 60;
+    return `${hours}h ${minutes}m`;
+}
+
+document.getElementById('flightForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const start = document.getElementById('start').value;
+    const arrival = document.getElementById('arrival').value;
+    if (!start || !arrival) return;
+    const duration = computeDuration(start, arrival);
+    flights.push({ start, arrival, duration });
+    localStorage.setItem('flights', JSON.stringify(flights));
+    render();
+    this.reset();
+});
+render();
+</script>
+</body>
+</html>
