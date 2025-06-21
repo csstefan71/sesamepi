@@ -18,11 +18,12 @@ for i in pinList:
     GPIO.output(i, GPIO.HIGH)
 
 def trigger() :
-        for i in pinList:
-          GPIO.output(i, GPIO.LOW)
-          time.sleep(0.5) 
-          GPIO.output(i, GPIO.HIGH)
-          GPIO.cleanup()
+    for i in pinList:
+        GPIO.output(i, GPIO.LOW)
+        time.sleep(0.5)
+        GPIO.output(i, GPIO.HIGH)
+
+    GPIO.cleanup()
      
 
 try: 
