@@ -13,16 +13,17 @@ pinList = [2]
 
 # loop through pins and set mode and state to 'low'
 
-for i in pinList: 
-    GPIO.setup(i, GPIO.OUT) 
+for i in pinList:
+    GPIO.setup(i, GPIO.OUT)
     GPIO.output(i, GPIO.HIGH)
 
 def trigger() :
-        for i in pinList:
-          GPIO.output(i, GPIO.LOW)
-          time.sleep(0.5) 
-          GPIO.output(i, GPIO.HIGH)
-          GPIO.cleanup()
+    for i in pinList:
+        GPIO.output(i, GPIO.LOW)
+        time.sleep(0.5)
+        GPIO.output(i, GPIO.HIGH)
+
+    GPIO.cleanup()
      
 
 try: 
